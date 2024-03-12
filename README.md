@@ -8,7 +8,7 @@ This project is part of the Artificial Intelligence course offered by the Warsaw
 
 - To understand the underlying mathematics and operations of convolutional neural networks.
 - To implement the forward and backward passes of a CNN from scratch.
-- To apply the CNN on a dataset (specify dataset here) for image classification tasks.
+- To apply the CNN on a dataset ["Fashion MNIST"](https://www.kaggle.com/datasets/zalando-research/fashionmnist) for image classification tasks.
 
 ## Getting Started
 
