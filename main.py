@@ -1,6 +1,4 @@
-import matplotlib.pyplot as plt
 import numpy as np
-import gzip
 from loader import MNIST
 from convolution_layer import ConvolutionLayer
 from pool_layer import PoolLayer
