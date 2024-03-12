@@ -1,10 +1,13 @@
+import os
 from typing import cast
 import numpy as np
+import cv2
 from loader import MNIST
 from convolution_layer import ConvolutionLayer
 from pool_layer import PoolLayer
 from softmax_layer import SoftMaxLayer
 from utils.shuffle import shuffle
+from adjust_sample_image import adjust_sample_image
 
 mndata = MNIST("./dataset")
 
@@ -104,3 +107,25 @@ for image, label in zip(test_images, test_labels):
 num_tests = len(test_images)
 print(f'Test Loss: {total_loss / num_tests}')
 print(f'Test Accuracy: {total_correct / num_tests}')
+
+samplesdir = "samples"
+outdir = "out"
+samples = os.listdir(samplesdir)
+
+if not os.path.exists(outdir):
+    os.makedirs(outdir)
+
+for sample in samples:
+    source_path = os.path.join(samplesdir, sample)
+    output_path = os.path.join(outdir, sample)
+    print(f"{source_path} -> {output_path}")
+    adjust_sample_image(source_path, output_path)
+
+if os.path.exists(outdir):
+    adjusted_samples = os.listdir(outdir)
+
+    for sample in adjusted_samples:
+        sample_image = cv2.imread(f'./{outdir}/{sample}', cv2.IMREAD_GRAYSCALE)
+        softmax_probs, _, _ = perform_forward_pass(sample_image, 0)
+        print(
+            f'Prediction for {sample}: {np.argmax(softmax_probs)}, probs: {softmax_probs}')
