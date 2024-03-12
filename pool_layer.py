@@ -87,3 +87,15 @@ class PoolLayer:
                                 self.filter_size + w, channel
                             ] = gradient_from_next_layer[row, column, channel]
         return gradient_input
+
+    def serialize(self) -> dict:
+        """
+        Serializes the Max Pooling layer.
+
+        Returns:
+        - A dictionary containing the attributes of the Max Pooling layer.
+        """
+        return {
+            "type": "PoolLayer",
+            "filter_size": self.filter_size
+        }

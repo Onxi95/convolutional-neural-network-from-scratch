@@ -92,3 +92,16 @@ class SoftMaxLayer:
             return gradient_loss_input.reshape(self.original_input_shape)
 
         return np.zeros(self.original_input_shape)
+
+    def serialize(self) -> dict:
+        """
+        Serializes the layer to a dictionary of its weights and biases.
+
+        Returns:
+        - A dictionary containing the layer's weights and biases.
+        """
+        return {
+            "type": "SoftmaxLayer",
+            "weights": self.weights.tolist(),
+            "biases": self.biases.tolist()
+        }

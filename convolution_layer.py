@@ -89,3 +89,16 @@ class ConvolutionLayer:
         # Update filters by subtracting a portion of the gradient determined by the learning rate.
         self.filters -= learning_rate * filters_gradient
         return filters_gradient
+
+    def serialize(self) -> dict:
+        """
+        Returns a dictionary of the Convolution layer's attributes for serialization.
+        """
+
+        layer_dict = {
+            "type": "ConvolutionLayer",
+            "number_of_filters": self.number_of_filters,
+            "filter_size": self.filter_size,
+            "filters": self.filters.tolist()
+        }
+        return layer_dict

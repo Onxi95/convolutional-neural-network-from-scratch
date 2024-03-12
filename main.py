@@ -1,4 +1,6 @@
 import os
+import json
+from datetime import datetime
 from typing import cast
 import numpy as np
 import cv2
@@ -57,7 +59,7 @@ def perform_forward_pass(image, label) -> tuple[np.ndarray, float, int]:
     return softmax_probs, loss, accuracy
 
 
-def update_model(image: np.ndarray, label: int, learning_rate: float = 0.003) -> tuple[float, int]:
+def update_model(image: np.ndarray, label: int, learning_rate: float = 0.005) -> tuple[float, int]:
     """
     Update the model weights based on the loss gradient, returning the loss and accuracy.
     """
@@ -129,3 +131,18 @@ if os.path.exists(outdir):
         softmax_probs, _, _ = perform_forward_pass(sample_image, 0)
         print(
             f'Prediction for {sample}: {np.argmax(softmax_probs)}, probs: {softmax_probs}')
+
+model_outdir = "model"
+if not os.path.exists(model_outdir):
+    os.makedirs(model_outdir)
+
+current_date = datetime.today().strftime('%Y-%m-%d-%H:%m')
+
+with open(f'{model_outdir}/model-{current_date}.json', 'w', encoding='utf-8') as f:
+    f.write(json.dumps(
+        {
+            "convolutionLayer": convolution_layer.serialize(),
+            "poolLayer": max_pooling_layer.serialize(),
+            "softmaxLayer": softmax_output_layer.serialize(),
+        }
+    ))
