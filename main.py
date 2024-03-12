@@ -1,3 +1,4 @@
+from typing import cast
 import numpy as np
 from loader import MNIST
 from convolution_layer import ConvolutionLayer
@@ -28,13 +29,15 @@ print("Layers initialized.")
 
 print("Shuffling data...")
 
-train_images, train_labels = shuffle(data_train, label_train)
-test_images, test_labels = shuffle(data_test, label_test)
+train_images, train_labels = shuffle(
+    cast(list[int], data_train), cast(list[int], label_train))
+test_images, test_labels = shuffle(
+    cast(list[int], data_test), cast(list[int], label_test))
 
 print("Data shuffled.")
 
 
-def perform_forward_pass(image, label):
+def perform_forward_pass(image, label) -> tuple[np.ndarray, float, int]:
     """
     Perform a forward pass through the CNN, calculate the loss and accuracy.
     """
@@ -45,13 +48,13 @@ def perform_forward_pass(image, label):
     pooled_output = max_pooling_layer.forward(convolution_output)
     softmax_probs = softmax_output_layer.forward(pooled_output)
 
-    loss = -np.log(softmax_probs[label])
+    loss = cast(float, -np.log(softmax_probs[label]))
     accuracy = int(np.argmax(softmax_probs) == label)
 
     return softmax_probs, loss, accuracy
 
 
-def update_model(image: np.ndarray, label: int, learning_rate: float = 0.003) -> (float, int):
+def update_model(image: np.ndarray, label: int, learning_rate: float = 0.003) -> tuple[float, int]:
     """
     Update the model weights based on the loss gradient, returning the loss and accuracy.
     """
@@ -77,8 +80,9 @@ for epoch in range(1, 5):
 
     for i, (image, label) in enumerate(zip(train_images, train_labels)):
         if i % 100 == 99:  # Print progress every 100 images
-            print(
-                f'{i + 1:>5} steps: Training Loss {cumulative_loss / 100:.5f} | Training Accuracy: {correct_predictions}%')
+            print(f'{i + 1:>5} steps')
+            print(f'Training Loss {cumulative_loss / 100:.5f}')
+            print(f'Training Accuracy: {correct_predictions}%')
             cumulative_loss = 0
             correct_predictions = 0
 

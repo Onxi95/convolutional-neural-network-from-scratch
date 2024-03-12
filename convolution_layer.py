@@ -1,5 +1,5 @@
-import numpy as np
 from typing import Generator, Tuple
+import numpy as np
 
 
 class ConvolutionLayer:
@@ -23,7 +23,9 @@ class ConvolutionLayer:
         self.filters: np.ndarray = np.random.randn(
             number_of_filters, filter_size, filter_size) / (filter_size ** 2)
 
-    def generate_image_regions(self, image: np.ndarray) -> Generator[Tuple[np.ndarray, int, int], None, None]:
+    def generate_image_regions(self, image: np.ndarray) -> Generator[
+        Tuple[np.ndarray, int, int], None, None
+    ]:
         """
         A generator function that yields regions of the image to be convolved with filters,
         including the region's top-left corner coordinates.
@@ -43,7 +45,8 @@ class ConvolutionLayer:
 
     def forward(self, image: np.ndarray) -> np.ndarray:
         """
-        Performs the forward propagation by applying the convolution operation between the image and filters.
+        Performs the forward propagation by applying the convolution operation between
+        the image and filters.
 
         Parameters:
         - image: The input image as a 2D array.

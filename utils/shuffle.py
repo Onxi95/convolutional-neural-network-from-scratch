@@ -14,7 +14,7 @@ def shuffle(data: list[int], labels: list[int], subset_size: int = 1500):
     - (numpy.ndarray, numpy.ndarray): The shuffled and subsetted data and labels.
     """
 
-    indices = np.arange(np.array(data).shape[0])
+    indices = np.arange(0, np.array(data).shape[0])
     np.random.shuffle(indices)
 
     shuffled_data = np.array(data)[indices][:subset_size]

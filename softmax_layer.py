@@ -1,12 +1,12 @@
-import numpy as np
 from typing import Tuple
+import numpy as np
 
 
 class SoftMaxLayer:
     """
-    It converts logits (the outputs of the previous layers) into probabilities by applying the softmax function.
-    Each neuron in the layer represents a class, and the output of each neuron is the probability that the given input
-    belongs to that class.
+    It converts logits (the outputs of the previous layers) into probabilities by applying the
+    softmax function. Each neuron in the layer represents a class, and the output of each neuron
+    is the probability that the given input belongs to that class.
     """
 
     def __init__(self, input_size: int, output_size: int) -> None:
@@ -20,6 +20,9 @@ class SoftMaxLayer:
         self.weights: np.ndarray = np.random.randn(
             input_size, output_size) / input_size
         self.biases: np.ndarray = np.zeros(output_size)
+        self.original_input_shape: Tuple[int, ...] = ()
+        self.flattened_input: np.ndarray = np.array([])
+        self.output_logits: np.ndarray = np.array([])
 
     def forward(self, input_tensor: np.ndarray) -> np.ndarray:
         """
@@ -31,7 +34,9 @@ class SoftMaxLayer:
         Returns:
         - The probabilities of each class.
         """
-        self.original_input_shape: Tuple[int, ...] = input_tensor.shape  # Preserve original shape for backprop
+
+        # Preserve original shape for backprop
+        self.original_input_shape: Tuple[int, ...] = input_tensor.shape
         input_flattened: np.ndarray = input_tensor.flatten()
         self.flattened_input: np.ndarray = input_flattened  # Stored for backpropagation
 
@@ -46,7 +51,8 @@ class SoftMaxLayer:
 
     def backward(self, gradient_of_loss: np.ndarray, learning_rate: float) -> np.ndarray:
         """
-        Performs the backward pass of the softmax layer, updating weights and biases based on the gradient of the loss.
+        Performs the backward pass of the softmax layer, updating weights 
+        and biases based on the gradient of the loss.
 
         Parameters:
         - gradient_of_loss: The gradient of the loss with respect to the output of this layer.
@@ -55,6 +61,7 @@ class SoftMaxLayer:
         Returns:
         - The gradient of the loss with respect to the input of this layer.
         """
+
         for i, gradient in enumerate(gradient_of_loss):
             if gradient == 0:
                 continue
@@ -83,3 +90,5 @@ class SoftMaxLayer:
             self.biases -= learning_rate * gradient_loss_biases
 
             return gradient_loss_input.reshape(self.original_input_shape)
+
+        return np.zeros(self.original_input_shape)

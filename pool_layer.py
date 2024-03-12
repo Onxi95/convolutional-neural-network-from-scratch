@@ -1,5 +1,5 @@
-import numpy as np
 from typing import Generator, Tuple
+import numpy as np
 
 
 class PoolLayer:
@@ -17,10 +17,14 @@ class PoolLayer:
         - filter_size: Size of the window over which to take the maximum, for both width and height.
         """
         self.filter_size: int = filter_size
+        self.image: np.ndarray = np.array([])
 
-    def generate_image_regions(self, image: np.ndarray) -> Generator[Tuple[np.ndarray, int, int], None, None]:
+    def generate_image_regions(self, image: np.ndarray) -> Generator[
+        Tuple[np.ndarray, int, int], None, None
+    ]:
         """
-        Yields square regions of the image based on the filter size along with their top-left corner coordinates.
+        Yields square regions of the image based on the filter size along with their
+        top-left corner coordinates.
 
         Parameters:
         - image: The input image as a 3D array (height, width, channels).
@@ -31,8 +35,12 @@ class PoolLayer:
 
         for row in range(new_height):
             for column in range(new_width):
-                image_region = image[(row * self.filter_size):(row * self.filter_size + self.filter_size),
-                                     (column * self.filter_size):(column * self.filter_size + self.filter_size)]
+                image_region = image[
+                    (row * self.filter_size):
+                    (row * self.filter_size + self.filter_size),
+                    (column * self.filter_size):
+                    (column * self.filter_size + self.filter_size)]
+
                 yield image_region, row, column
 
     def forward(self, image: np.ndarray) -> np.ndarray:
@@ -69,11 +77,13 @@ class PoolLayer:
             height, width, num_channels = image_region.shape
             max_values = np.amax(image_region, axis=(0, 1))
 
-            for i in range(height):
-                for j in range(width):
+            for h in range(height):
+                for w in range(width):
                     for channel in range(num_channels):
                         # Pass gradient only to the maximum value within each pooling region.
-                        if image_region[i, j, channel] == max_values[channel]:
-                            gradient_input[row * self.filter_size + i, column * self.filter_size +
-                                           j, channel] = gradient_from_next_layer[row, column, channel]
+                        if image_region[h, w, channel] == max_values[channel]:
+                            gradient_input[
+                                row * self.filter_size + h, column *
+                                self.filter_size + w, channel
+                            ] = gradient_from_next_layer[row, column, channel]
         return gradient_input
