@@ -166,3 +166,6 @@ dataset
 
 # out dir for processed sample images
 out
+
+# model dir for trained model
+model
