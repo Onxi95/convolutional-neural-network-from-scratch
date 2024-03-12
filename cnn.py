@@ -5,11 +5,14 @@ from loader import MNIST
 from convolution_layer import ConvolutionLayer
 from pool_layer import PoolLayer
 from softmax_layer import SoftMaxLayer
+from utils.shuffle import shuffle
 
 mndata = MNIST("./dataset")
 
+print("Loading data...")
 data_train, label_train = mndata.load_training()
 data_test, label_test = mndata.load_testing()
+print("Data loaded.")
 
 img_size = 28
 filters_count = 8
@@ -18,20 +21,19 @@ pool_size = 1
 softmax_edge = int((img_size - 2) / pool_size)
 output_classes = 10
 
+print("Initializing layers...")
 convolution_layer = ConvolutionLayer(filters_count, filter_size)
 max_pooling_layer = PoolLayer(pool_size)
 softmax_output_layer = SoftMaxLayer(
     softmax_edge**2 * filters_count, output_classes)
+print("Layers initialized.")
 
-# Sample a subset for training and testing
-indices = np.arange(np.array(data_train).shape[0])
-np.random.shuffle(indices)
+print("Shuffling data...")
 
-subset_size = 1500
-train_images = data_train[:subset_size]
-train_labels = label_train[:subset_size]
-test_images = data_test[:subset_size]
-test_labels = label_test[:subset_size]
+train_images, train_labels = shuffle(data_train, label_train)
+test_images, test_labels = shuffle(data_test, label_test)
+
+print("Data shuffled.")
 
 
 def perform_forward_pass(image, label):
@@ -82,7 +84,7 @@ for epoch in range(1, 5):
             cumulative_loss = 0
             correct_predictions = 0
 
-        image_array = np.array(image).reshape(img_size, img_size)
+        image_array = image.reshape(img_size, img_size)
         loss, correct = update_model(image_array, label)
         cumulative_loss += loss
         correct_predictions += correct
@@ -92,7 +94,7 @@ total_loss = 0
 total_correct = 0
 
 for image, label in zip(test_images, test_labels):
-    image_array = np.array(image).reshape(img_size, img_size)
+    image_array = image.reshape(img_size, img_size)
     _, loss, correct = perform_forward_pass(image_array, label)
     total_loss += loss
     total_correct += correct
