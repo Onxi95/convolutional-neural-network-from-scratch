@@ -17,7 +17,7 @@ data_test, label_test = mndata.load_testing()
 print("Data loaded.")
 
 img_size = 28
-filters_count = 8
+filters_count = 16
 filter_size = 3
 pool_size = 1
 softmax_edge = int((img_size - 2) / pool_size)
