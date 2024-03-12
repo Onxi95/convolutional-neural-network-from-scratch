@@ -7,7 +7,7 @@ from convolution_layer import ConvolutionLayer
 from pool_layer import PoolLayer
 from softmax_layer import SoftMaxLayer
 from utils.shuffle import shuffle
-from adjust_sample_image import adjust_sample_image
+from utils.adjust_sample_image import adjust_sample_image
 
 mndata = MNIST("./dataset")
 
