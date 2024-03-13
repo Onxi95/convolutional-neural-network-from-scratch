@@ -17,6 +17,8 @@ class SoftMaxLayer:
         - input_size: The number of input nodes.
         - output_size: The number of output nodes (classes).
         """
+        self.input_size = input_size
+        self.output_size = output_size
         self.weights: np.ndarray = np.random.randn(
             input_size, output_size) / input_size
         self.biases: np.ndarray = np.zeros(output_size)
@@ -102,6 +104,31 @@ class SoftMaxLayer:
         """
         return {
             "type": "SoftmaxLayer",
+            "input_size": self.input_size,
+            "output_size": self.output_size,
             "weights": self.weights.tolist(),
             "biases": self.biases.tolist()
         }
+
+    @staticmethod
+    def deserialize(data: dict):
+        """
+        Deserializes the layer from a dictionary.
+
+        Parameters:
+        - data: A dictionary containing the layer's input size, output size, weights and biases.
+
+        Returns:
+        - A new SoftmaxLayer instance.
+        """
+
+        layer = data["softmaxLayer"]
+        input_size = layer["input_size"]
+        output_size = layer["output_size"]
+        weights = np.array(layer["weights"])
+        biases = np.array(layer["biases"])
+
+        SoftMax = SoftMaxLayer(input_size, output_size)
+        SoftMax.weights = weights
+        SoftMax.biases = biases
+        return SoftMax
