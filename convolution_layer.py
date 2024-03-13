@@ -102,3 +102,25 @@ class ConvolutionLayer:
             "filters": self.filters.tolist()
         }
         return layer_dict
+
+    @staticmethod
+    def deserialize(model: dict):
+        """
+        Deserializes a dictionary to a Convolution layer object.
+
+        Parameters:
+        - model: A dictionary containing the attributes of the Convolution layer.
+
+        Returns:
+        - A Convolution layer object.
+
+        """
+        layer = model["convolutionLayer"]
+        number_of_filters = layer["number_of_filters"]
+        filter_size = layer["filter_size"]
+        filters = layer["filters"]
+
+        Convolution = ConvolutionLayer(number_of_filters, filter_size)
+        Convolution.filters = np.array(filters)
+
+        return Convolution
