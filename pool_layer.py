@@ -99,3 +99,19 @@ class PoolLayer:
             "type": "PoolLayer",
             "filter_size": self.filter_size
         }
+
+    @staticmethod
+    def deserialize(data: dict):
+        """
+        Deserializes the Max Pooling layer from a dictionary.
+
+        Parameters:
+        - data: A dictionary containing the attributes of the Max Pooling layer.
+
+        Returns:
+        - A new PoolLayer instance.
+        """
+        filter_size = data["poolLayer"]["filter_size"]
+
+        Pool = PoolLayer(filter_size)
+        return Pool
