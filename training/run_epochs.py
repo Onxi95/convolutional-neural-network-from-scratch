@@ -10,6 +10,7 @@ def run_epochs(
         train_labels: np.ndarray,
         img_size: int,
         learning_rate: float,
+        num_of_epochs: int,
         convolution_layer: ConvolutionLayer,
         max_pooling_layer: PoolLayer,
         softmax_output_layer: SoftMaxLayer
@@ -30,7 +31,7 @@ def run_epochs(
         None
     """
     print("Starting training...")
-    for epoch in range(1, 5):
+    for epoch in range(1, num_of_epochs + 1):
         print(f'Epoch {epoch}')
         cumulative_loss = 0.0
         correct_predictions = 0

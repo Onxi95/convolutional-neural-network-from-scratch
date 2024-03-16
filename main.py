@@ -23,14 +23,14 @@ data_test, label_test = mndata.load_testing()
 print("Data loaded.")
 
 img_size = 28
-filters_count = 64
+filters_count = 32
 filter_size = 3
 pool_size = 1
 softmax_edge = int((img_size - 2) / pool_size)
 output_classes = 10
-num_of_epochs = 4
+num_of_epochs = 3
 
-learning_rate = 0.01
+learning_rate = 0.005
 
 print("Shuffling data...")
 
@@ -76,6 +76,7 @@ run_epochs(
     train_labels,
     img_size,
     learning_rate,
+    num_of_epochs,
     convolution_layer,
     max_pooling_layer,
     softmax_output_layer
