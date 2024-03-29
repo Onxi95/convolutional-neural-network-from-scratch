@@ -8,6 +8,20 @@ from softmax_layer import SoftMaxLayer
 from training.perform_forward_pass import perform_forward_pass
 from utils.adjust_sample_image import adjust_sample_image
 
+# https://www.kaggle.com/datasets/zalando-research/fashionmnist
+labels = {
+    0: 'T-shirt/top',
+    1: 'Trouser',
+    2: 'Pullover',
+    3: 'Dress',
+    4: 'Coat',
+    5: 'Sandal',
+    6: 'Shirt',
+    7: 'Sneaker',
+    8: 'Bag',
+    9: 'Ankle boot'
+}
+
 
 def predict_in_dir(convolution_layer: ConvolutionLayer,
                    max_pooling_layer: PoolLayer,
@@ -47,5 +61,13 @@ def predict_in_dir(convolution_layer: ConvolutionLayer,
             softmax_probs, _, _ = perform_forward_pass(
                 sample_image, 0, convolution_layer, max_pooling_layer, softmax_output_layer
             )
+
+            prediction = labels[np.argmax(softmax_probs)]
+            top_3_guesses = list(map(
+                lambda x: (labels[x[0]], x[1]),
+                sorted(
+                    enumerate(softmax_probs),
+                    key=lambda x: x[1], reverse=True)[:3]
+            ))
             print(
-                f'Prediction for {sample}: {np.argmax(softmax_probs)}, probs: {softmax_probs}')
+                f'Prediction for {sample}: {prediction}, probs: {top_3_guesses}')
