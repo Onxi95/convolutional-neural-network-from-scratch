@@ -14,6 +14,7 @@ from training.run_epochs import run_epochs
 from utils.shuffle import shuffle
 from utils.adjust_sample_image import adjust_sample_image
 
+img_size = 28
 
 mndata = MNIST("./dataset")
 
@@ -22,15 +23,6 @@ data_train, label_train = mndata.load_training()
 data_test, label_test = mndata.load_testing()
 print("Data loaded.")
 
-img_size = 28
-filters_count = 32
-filter_size = 3
-pool_size = 1
-softmax_edge = int((img_size - 2) / pool_size)
-output_classes = 10
-num_of_epochs = 3
-
-learning_rate = 0.005
 
 print("Shuffling data...")
 
@@ -63,6 +55,20 @@ if should_train_again.lower() == "n":
         softmax_output_layer
     )
     exit(0)
+
+output_classes = 10
+
+filters_count = int(
+    input("Enter the number of filters (default: 32): ").strip() or 32)
+filter_size = int(input("Enter the filter size (default: 5): ").strip() or 5)
+pool_size = int(input("Enter the pool size (default: 2): ").strip() or 2)
+
+softmax_edge = int((img_size - 2) / pool_size)
+
+num_of_epochs = int(
+    input("Enter the number of epochs (default: 5): ").strip() or 5)
+learning_rate = float(
+    input("Enter the learning rate (default: 0.005): ").strip() or 0.005)
 
 print("Initializing layers...")
 convolution_layer = ConvolutionLayer(filters_count, filter_size)
