@@ -120,7 +120,7 @@ if not os.path.exists(model_outdir):
 
 current_date = datetime.today().strftime('%Y-%m-%d-%H:%m')
 model_name = input(
-    f"Enter the name of the model (default: {current_date}): ") or current_date
+    f"Enter the name of the model (default: {current_date}.json): ") or current_date
 
 save_model(convolution_layer,
            max_pooling_layer,
