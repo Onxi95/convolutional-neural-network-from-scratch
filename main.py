@@ -2,19 +2,18 @@ import os
 import json
 from datetime import datetime
 from typing import cast
-import numpy as np
-import cv2
 from loader import MNIST
 from convolution_layer import ConvolutionLayer
 from pool_layer import PoolLayer
 from softmax_layer import SoftMaxLayer
 from tests.run_testing_phase import run_testing_phase
-from training.perform_forward_pass import perform_forward_pass
+from training.predict_in_dir import predict_in_dir
 from training.run_epochs import run_epochs
 from utils.shuffle import shuffle
-from utils.adjust_sample_image import adjust_sample_image
 
 img_size = 28
+samples_dir = "samples"
+outdir = "out"
 
 mndata = MNIST("./dataset")
 
@@ -53,6 +52,13 @@ if should_train_again.lower() == "n":
         convolution_layer,
         max_pooling_layer,
         softmax_output_layer
+    )
+    predict_in_dir(
+        convolution_layer,
+        max_pooling_layer,
+        softmax_output_layer,
+        samples_dir,
+        outdir
     )
     exit(0)
 
@@ -97,29 +103,13 @@ run_testing_phase(
     softmax_output_layer
 )
 
-samplesdir = "samples"
-outdir = "out"
-samples = os.listdir(samplesdir)
-
-if not os.path.exists(outdir):
-    os.makedirs(outdir)
-
-for sample in samples:
-    source_path = os.path.join(samplesdir, sample)
-    output_path = os.path.join(outdir, sample)
-    print(f"{source_path} -> {output_path}")
-    adjust_sample_image(source_path, output_path)
-
-if os.path.exists(outdir):
-    adjusted_samples = os.listdir(outdir)
-
-    for sample in adjusted_samples:
-        sample_image = cv2.imread(f'./{outdir}/{sample}', cv2.IMREAD_GRAYSCALE)
-        softmax_probs, _, _ = perform_forward_pass(
-            sample_image, 0, convolution_layer, max_pooling_layer, softmax_output_layer
-        )
-        print(
-            f'Prediction for {sample}: {np.argmax(softmax_probs)}, probs: {softmax_probs}')
+predict_in_dir(
+    convolution_layer,
+    max_pooling_layer,
+    softmax_output_layer,
+    samples_dir,
+    outdir
+)
 
 model_outdir = "model"
 if not os.path.exists(model_outdir):
