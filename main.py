@@ -9,6 +9,7 @@ from softmax_layer import SoftMaxLayer
 from tests.run_testing_phase import run_testing_phase
 from training.predict_in_dir import predict_in_dir
 from training.run_epochs import run_epochs
+from utils.save_model import save_model
 from utils.shuffle import shuffle
 
 img_size = 28
@@ -111,17 +112,18 @@ predict_in_dir(
     outdir
 )
 
-model_outdir = "model"
+model_outdir = input(
+    "Enter the directory to save the model (default: 'model'): ") or "model"
+
 if not os.path.exists(model_outdir):
     os.makedirs(model_outdir)
 
 current_date = datetime.today().strftime('%Y-%m-%d-%H:%m')
+model_name = input(
+    f"Enter the name of the model (default: {current_date}): ") or current_date
 
-with open(f'{model_outdir}/model-{current_date}.json', 'w', encoding='utf-8') as f:
-    f.write(json.dumps(
-        {
-            "convolutionLayer": convolution_layer.serialize(),
-            "poolLayer": max_pooling_layer.serialize(),
-            "softmaxLayer": softmax_output_layer.serialize(),
-        }
-    ))
+save_model(convolution_layer,
+           max_pooling_layer,
+           softmax_output_layer,
+           model_name,
+           model_outdir)
