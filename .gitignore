@@ -169,3 +169,6 @@ out
 
 # model dir for trained model
 model
+
+# draft jupyter notebooks
+notebooks
