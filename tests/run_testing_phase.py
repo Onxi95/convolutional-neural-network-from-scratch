@@ -42,6 +42,6 @@ def run_testing_phase(
     test_loss = total_loss / num_tests
     test_accuracy = total_correct / num_tests
     print(f'Test Loss: {test_loss}')
-    print(f'Test Accuracy: {test_accuracy}')
+    print(f'Test Accuracy: {test_accuracy * 100:.2f}%')
 
     return test_loss, test_accuracy
