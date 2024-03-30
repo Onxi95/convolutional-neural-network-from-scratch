@@ -24,13 +24,19 @@ data_train, label_train = mndata.load_training()
 data_test, label_test = mndata.load_testing()
 logger.info("Data loaded.")
 
+training_set_size = int(input(
+    "Enter the size of the training set (default: 10 000, max: 60 000): ") or 10_000)
+logger.info("Training set size: %s", training_set_size)
+test_set_size = int(input(
+    "Enter the size of the training set (default: 1 000, max: 10 000): ") or 1_000)
+logger.info("Test set size: %s", test_set_size)
 
 logger.info("Shuffling data...")
 
 train_images, train_labels = shuffle(
-    cast(list[int], data_train), cast(list[int], label_train))
+    cast(list[int], data_train), cast(list[int], label_train), training_set_size)
 test_images, test_labels = shuffle(
-    cast(list[int], data_test), cast(list[int], label_test))
+    cast(list[int], data_test), cast(list[int], label_test), test_set_size)
 
 logger.info("Data shuffled.")
 
