@@ -68,15 +68,19 @@ output_classes = 10
 
 filters_count = int(
     input("Enter the number of filters (default: 32): ").strip() or 32)
+logger.info("Number of filters: %s", filters_count)
 filter_size = int(input("Enter the filter size (default: 5): ").strip() or 5)
+logger.info("Filter size: %s", filter_size)
 pool_size = int(input("Enter the pool size (default: 2): ").strip() or 2)
-
+logger.info("Pool size: %s", pool_size)
 softmax_edge = int((img_size - 2) / pool_size)
 
 num_of_epochs = int(
     input("Enter the number of epochs (default: 5): ").strip() or 5)
+logger.info("Number of epochs: %s", num_of_epochs)
 learning_rate = float(
     input("Enter the learning rate (default: 0.005): ").strip() or 0.005)
+logger.info("Learning rate: %s", learning_rate)
 
 logger.info("Initializing layers...")
 convolution_layer = ConvolutionLayer(filters_count, filter_size)
