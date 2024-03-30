@@ -67,8 +67,13 @@ def print_confusion_matrix_with_labels(confusion_matrix, labels: list[str], colu
     table = separator + "\n" + header + "\n" + separator + "\n"
 
     for i, row_label in enumerate(labels):
-        row_str = f"{row_label.center(column_width)}| " + " | ".join(
-            [str(value).center(column_width) for value in confusion_matrix[i]])
+        row_str = f"{row_label.center(column_width)}| "
+        for value in confusion_matrix[i]:
+            # row percentage
+            percentage = (
+                value / sum(confusion_matrix[i])) * 100 if sum(confusion_matrix[i]) != 0 else 0
+            value_str = f"{value} ({percentage:.0f}%)".center(column_width)
+            row_str += value_str + " | "
         table += row_str + "\n" + separator + "\n"
 
     logger.info(table)
