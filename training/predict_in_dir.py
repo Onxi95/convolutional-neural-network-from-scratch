@@ -37,7 +37,7 @@ def predict_in_dir(convolution_layer: ConvolutionLayer,
     for sample in samples:
         source_path = os.path.join(samples_dir, sample)
         output_path = os.path.join(output_dir_path, sample)
-        logger.info(f"{source_path} -> {output_path}")
+        logger.info("%s -> %s", source_path, output_path)
         adjust_sample_image(source_path, output_path)
 
     if os.path.exists(output_dir_path):
@@ -58,4 +58,4 @@ def predict_in_dir(convolution_layer: ConvolutionLayer,
                     key=lambda x: x[1], reverse=True)[:3]
             ))
             logger.info(
-                f'Prediction for {sample}: {prediction}, probs: {top_3_guesses}')
+                'Prediction for %s: %s, probs: %s', sample, prediction, top_3_guesses)

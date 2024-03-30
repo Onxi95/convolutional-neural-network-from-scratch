@@ -41,7 +41,7 @@ def adjust_sample_image(source_path: str, output_path: str, shape: tuple[int, in
 
     image = cv2.imread(source_path)
     if image is None:
-        logger.info(f"Failed to read the image from {source_path}")
+        logger.info("Failed to read the image from %s", source_path)
         return
 
     processed_image = replace_and_invert(image)
@@ -50,4 +50,4 @@ def adjust_sample_image(source_path: str, output_path: str, shape: tuple[int, in
 
     success = cv2.imwrite(output_path, resized_image)
     if not success:
-        logger.info(f"Failed to save the image to {output_path}")
+        logger.info("Failed to save the image to %s", output_path)

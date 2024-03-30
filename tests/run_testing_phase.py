@@ -47,8 +47,8 @@ def run_testing_phase(
     num_tests = len(test_images)
     test_loss = total_loss / num_tests
     test_accuracy = total_correct / num_tests
-    logger.info(f'Test Loss: {test_loss}')
-    logger.info(f'Test Accuracy: {test_accuracy * 100:.2f}%')
+    logger.info('Test Loss: %s', test_loss)
+    logger.info('Test Accuracy: %.2f%%', test_accuracy * 100)
 
     logger.info("Confusion Matrix:")
     print_confusion_matrix_with_labels(confusion_matrix, list(labels.values()))
