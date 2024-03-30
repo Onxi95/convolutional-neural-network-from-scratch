@@ -7,20 +7,7 @@ from pool_layer import PoolLayer
 from softmax_layer import SoftMaxLayer
 from training.perform_forward_pass import perform_forward_pass
 from utils.adjust_sample_image import adjust_sample_image
-
-# https://www.kaggle.com/datasets/zalando-research/fashionmnist
-labels = {
-    0: 'T-shirt/top',
-    1: 'Trouser',
-    2: 'Pullover',
-    3: 'Dress',
-    4: 'Coat',
-    5: 'Sandal',
-    6: 'Shirt',
-    7: 'Sneaker',
-    8: 'Bag',
-    9: 'Ankle boot'
-}
+from utils.labels import labels
 
 
 def predict_in_dir(convolution_layer: ConvolutionLayer,

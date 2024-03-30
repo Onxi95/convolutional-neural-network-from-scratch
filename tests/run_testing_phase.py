@@ -4,6 +4,7 @@ from convolution_layer import ConvolutionLayer
 from pool_layer import PoolLayer
 from softmax_layer import SoftMaxLayer
 from training.perform_forward_pass import perform_forward_pass
+from utils.labels import labels
 
 
 def run_testing_phase(
@@ -49,6 +50,26 @@ def run_testing_phase(
     print(f'Test Accuracy: {test_accuracy * 100:.2f}%')
 
     print("Confusion Matrix:")
-    print(confusion_matrix)
+    print_confusion_matrix_with_labels(confusion_matrix, list(labels.values()))
 
     return test_loss, test_accuracy
+
+
+def print_confusion_matrix_with_labels(confusion_matrix, labels: list[str], column_width=12):
+    """
+    Prints the confusion matrix with class labels.
+    """
+    header = " " * column_width + "| " + \
+        " | ".join([label.center(column_width) for label in labels])
+    separator = "-" * len(header)
+
+    print(separator)
+    print(header)
+    print(separator)
+
+    for i, row_label in enumerate(labels):
+        row_str = f"{row_label.center(column_width)}| " + " | ".join(
+            [str(value).center(column_width) for value in confusion_matrix[i]])
+        print(row_str)
+
+    print(separator)
