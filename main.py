@@ -71,13 +71,12 @@ if should_train_again.lower() == "n":
     exit(0)
 
 output_classes = 10
+filter_size = 3
 
 filters_count = int(
     input("Enter the number of filters (default: 32): ").strip() or 32)
 logger.info("Number of filters: %s", filters_count)
-filter_size = int(input("Enter the filter size (default: 5): ").strip() or 5)
-logger.info("Filter size: %s", filter_size)
-pool_size = int(input("Enter the pool size (default: 2): ").strip() or 2)
+pool_size = int(input("Enter the pool size (default: 1): ").strip() or 1)
 logger.info("Pool size: %s", pool_size)
 softmax_edge = int((img_size - 2) / pool_size)
 
