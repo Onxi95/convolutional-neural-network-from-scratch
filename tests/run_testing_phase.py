@@ -5,6 +5,7 @@ from pool_layer import PoolLayer
 from softmax_layer import SoftMaxLayer
 from training.perform_forward_pass import perform_forward_pass
 from utils.labels import labels
+from utils.logger import logger
 
 
 def run_testing_phase(
@@ -30,7 +31,7 @@ def run_testing_phase(
     """
     confusion_matrix = np.zeros((10, 10), dtype=int)
 
-    print("Testing phase...")
+    logger.info("Testing phase...")
     total_loss = 0
     total_correct = 0
 
@@ -46,10 +47,10 @@ def run_testing_phase(
     num_tests = len(test_images)
     test_loss = total_loss / num_tests
     test_accuracy = total_correct / num_tests
-    print(f'Test Loss: {test_loss}')
-    print(f'Test Accuracy: {test_accuracy * 100:.2f}%')
+    logger.info(f'Test Loss: {test_loss}')
+    logger.info(f'Test Accuracy: {test_accuracy * 100:.2f}%')
 
-    print("Confusion Matrix:")
+    logger.info("Confusion Matrix:")
     print_confusion_matrix_with_labels(confusion_matrix, list(labels.values()))
 
     return test_loss, test_accuracy
@@ -63,13 +64,13 @@ def print_confusion_matrix_with_labels(confusion_matrix, labels: list[str], colu
         " | ".join([label.center(column_width) for label in labels])
     separator = "-" * len(header)
 
-    print(separator)
-    print(header)
-    print(separator)
+    logger.info(separator)
+    logger.info(header)
+    logger.info(separator)
 
     for i, row_label in enumerate(labels):
         row_str = f"{row_label.center(column_width)}| " + " | ".join(
             [str(value).center(column_width) for value in confusion_matrix[i]])
-        print(row_str)
+        logger.info(row_str)
 
-    print(separator)
+    logger.info(separator)

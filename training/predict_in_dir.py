@@ -8,6 +8,7 @@ from softmax_layer import SoftMaxLayer
 from training.perform_forward_pass import perform_forward_pass
 from utils.adjust_sample_image import adjust_sample_image
 from utils.labels import labels
+from utils.logger import logger
 
 
 def predict_in_dir(convolution_layer: ConvolutionLayer,
@@ -36,7 +37,7 @@ def predict_in_dir(convolution_layer: ConvolutionLayer,
     for sample in samples:
         source_path = os.path.join(samples_dir, sample)
         output_path = os.path.join(output_dir_path, sample)
-        print(f"{source_path} -> {output_path}")
+        logger.info(f"{source_path} -> {output_path}")
         adjust_sample_image(source_path, output_path)
 
     if os.path.exists(output_dir_path):
@@ -56,5 +57,5 @@ def predict_in_dir(convolution_layer: ConvolutionLayer,
                     enumerate(softmax_probs),
                     key=lambda x: x[1], reverse=True)[:3]
             ))
-            print(
+            logger.info(
                 f'Prediction for {sample}: {prediction}, probs: {top_3_guesses}')

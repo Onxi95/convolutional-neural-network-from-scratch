@@ -3,6 +3,7 @@ from convolution_layer import ConvolutionLayer
 from pool_layer import PoolLayer
 from softmax_layer import SoftMaxLayer
 from .update_model import update_model
+from utils.logger import logger
 
 
 def run_epochs(
@@ -30,17 +31,17 @@ def run_epochs(
     Returns:
         None
     """
-    print("Starting training...")
+    logger.info("Starting training...")
     for epoch in range(1, num_of_epochs + 1):
-        print(f'Epoch {epoch}')
+        logger.info(f'Epoch {epoch}')
         cumulative_loss = 0.0
         correct_predictions = 0
 
         for i, (image, label) in enumerate(zip(train_images, train_labels)):
             if i % 100 == 99:  # Print progress every 100 images
-                print(f'{i + 1:>5} steps')
-                print(f'Training Loss {cumulative_loss / 100:.5f}')
-                print(f'Training Accuracy: {correct_predictions}%')
+                logger.info(f'{i + 1:>5} steps')
+                logger.info(f'Training Loss {cumulative_loss / 100:.5f}')
+                logger.info(f'Training Accuracy: {correct_predictions}%')
                 cumulative_loss = 0
                 correct_predictions = 0
 

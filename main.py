@@ -11,6 +11,7 @@ from training.predict_in_dir import predict_in_dir
 from training.run_epochs import run_epochs
 from utils.save_model import save_model
 from utils.shuffle import shuffle
+from utils.logger import logger
 
 img_size = 28
 samples_dir = "samples"
@@ -18,34 +19,34 @@ outdir = "out"
 
 mndata = MNIST("./dataset")
 
-print("Loading data...")
+logger.info("Loading data...")
 data_train, label_train = mndata.load_training()
 data_test, label_test = mndata.load_testing()
-print("Data loaded.")
+logger.info("Data loaded.")
 
 
-print("Shuffling data...")
+logger.info("Shuffling data...")
 
 train_images, train_labels = shuffle(
     cast(list[int], data_train), cast(list[int], label_train))
 test_images, test_labels = shuffle(
     cast(list[int], data_test), cast(list[int], label_test))
 
-print("Data shuffled.")
+logger.info("Data shuffled.")
 
 should_train_again = input("Do you want to train the model? (Y/n): ")
 if should_train_again.lower() == "n":
-    print("Skipping training...")
+    logger.info("Skipping training...")
     path: str = input("Enter the relative path of the model to load: ")
-    print("Loading model...")
+    logger.info("Loading model...")
     with open(path, "r", encoding="utf-8") as f:
         model = json.load(f)
-    print("Model loaded.")
-    print("Initializing layers...")
+    logger.info("Model loaded.")
+    logger.info("Initializing layers...")
     convolution_layer = ConvolutionLayer.deserialize(model)
     max_pooling_layer = PoolLayer.deserialize(model)
     softmax_output_layer = SoftMaxLayer.deserialize(model)
-    print("Layers initialized.")
+    logger.info("Layers initialized.")
     run_testing_phase(
         test_images,
         test_labels,
@@ -77,12 +78,12 @@ num_of_epochs = int(
 learning_rate = float(
     input("Enter the learning rate (default: 0.005): ").strip() or 0.005)
 
-print("Initializing layers...")
+logger.info("Initializing layers...")
 convolution_layer = ConvolutionLayer(filters_count, filter_size)
 max_pooling_layer = PoolLayer(pool_size)
 softmax_output_layer = SoftMaxLayer(
     softmax_edge**2 * filters_count, output_classes)
-print("Layers initialized.")
+logger.info("Layers initialized.")
 
 run_epochs(
     train_images,
