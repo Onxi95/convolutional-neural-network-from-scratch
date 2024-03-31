@@ -6,10 +6,11 @@ from softmax_layer import SoftMaxLayer
 
 
 def perform_forward_pass(
-    image: np.ndarray, label: int,
+    image: np.ndarray,
+    label: int,
     convolution: ConvolutionLayer,
     pool: PoolLayer,
-    softMax: SoftMaxLayer
+    softMax: SoftMaxLayer,
 ) -> tuple[np.ndarray, float, int]:
     """
     Perform a forward pass through the CNN, calculate the loss and accuracy.

@@ -6,12 +6,13 @@ from pool_layer import PoolLayer
 from softmax_layer import SoftMaxLayer
 
 
-def save_model(convolution_layer: ConvolutionLayer,
-               max_pooling_layer: PoolLayer,
-               softmax_output_layer: SoftMaxLayer,
-               model_name: str,
-               model_outdir: str
-               ) -> None:
+def save_model(
+    convolution_layer: ConvolutionLayer,
+    max_pooling_layer: PoolLayer,
+    softmax_output_layer: SoftMaxLayer,
+    model_name: str,
+    model_outdir: str,
+) -> None:
     """
     Saves the model to a directory.
 
@@ -28,11 +29,13 @@ def save_model(convolution_layer: ConvolutionLayer,
     if not os.path.exists(model_outdir):
         os.makedirs(model_outdir)
 
-    with open(f'{model_outdir}/{model_name}', 'w', encoding='utf-8') as f:
-        f.write(json.dumps(
-            {
-                "convolutionLayer": convolution_layer.serialize(),
-                "poolLayer": max_pooling_layer.serialize(),
-                "softmaxLayer": softmax_output_layer.serialize(),
-            }
-        ))
+    with open(f"{model_outdir}/{model_name}", "w", encoding="utf-8") as f:
+        f.write(
+            json.dumps(
+                {
+                    "convolutionLayer": convolution_layer.serialize(),
+                    "poolLayer": max_pooling_layer.serialize(),
+                    "softmaxLayer": softmax_output_layer.serialize(),
+                }
+            )
+        )

@@ -19,8 +19,7 @@ class SoftMaxLayer:
         """
         self.input_size = input_size
         self.output_size = output_size
-        self.weights: np.ndarray = np.random.randn(
-            input_size, output_size) / input_size
+        self.weights: np.ndarray = np.random.randn(input_size, output_size) / input_size
         self.biases: np.ndarray = np.zeros(output_size)
         self.original_input_shape: Tuple[int, ...] = ()
         self.flattened_input: np.ndarray = np.array([])
@@ -42,8 +41,7 @@ class SoftMaxLayer:
         input_flattened: np.ndarray = input_tensor.flatten()
         self.flattened_input: np.ndarray = input_flattened  # Stored for backpropagation
 
-        logits: np.ndarray = np.dot(
-            input_flattened, self.weights) + self.biases
+        logits: np.ndarray = np.dot(input_flattened, self.weights) + self.biases
         self.output_logits: np.ndarray = logits  # Stored for backpropagation
 
         exp_logits: np.ndarray = np.exp(logits)
@@ -51,9 +49,11 @@ class SoftMaxLayer:
 
         return probabilities
 
-    def backward(self, gradient_of_loss: np.ndarray, learning_rate: float) -> np.ndarray:
+    def backward(
+        self, gradient_of_loss: np.ndarray, learning_rate: float
+    ) -> np.ndarray:
         """
-        Performs the backward pass of the softmax layer, updating weights 
+        Performs the backward pass of the softmax layer, updating weights
         and biases based on the gradient of the loss.
 
         Parameters:
@@ -71,10 +71,10 @@ class SoftMaxLayer:
             exp_logits: np.ndarray = np.exp(self.output_logits)
             sum_exp_logits: float = np.sum(exp_logits)
 
-            gradient_softmax_output = - \
-                exp_logits[i] * exp_logits / (sum_exp_logits ** 2)
-            gradient_softmax_output[i] = exp_logits[i] * \
-                (sum_exp_logits - exp_logits[i]) / (sum_exp_logits ** 2)
+            gradient_softmax_output = -exp_logits[i] * exp_logits / (sum_exp_logits**2)
+            gradient_softmax_output[i] = (
+                exp_logits[i] * (sum_exp_logits - exp_logits[i]) / (sum_exp_logits**2)
+            )
 
             gradient_logits_weights = self.flattened_input
             gradient_logits_biases = 1
@@ -83,10 +83,10 @@ class SoftMaxLayer:
             gradient_loss_logits = gradient * gradient_softmax_output
 
             gradient_loss_weights = np.outer(
-                gradient_logits_weights, gradient_loss_logits)
+                gradient_logits_weights, gradient_loss_logits
+            )
             gradient_loss_biases = gradient_loss_logits * gradient_logits_biases
-            gradient_loss_input = gradient_logits_input.dot(
-                gradient_loss_logits)
+            gradient_loss_input = gradient_logits_input.dot(gradient_loss_logits)
 
             self.weights -= learning_rate * gradient_loss_weights
             self.biases -= learning_rate * gradient_loss_biases
@@ -107,7 +107,7 @@ class SoftMaxLayer:
             "input_size": self.input_size,
             "output_size": self.output_size,
             "weights": self.weights.tolist(),
-            "biases": self.biases.tolist()
+            "biases": self.biases.tolist(),
         }
 
     @staticmethod

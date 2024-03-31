@@ -19,9 +19,9 @@ class PoolLayer:
         self.filter_size: int = filter_size
         self.image: np.ndarray = np.array([])
 
-    def generate_image_regions(self, image: np.ndarray) -> Generator[
-        Tuple[np.ndarray, int, int], None, None
-    ]:
+    def generate_image_regions(
+        self, image: np.ndarray
+    ) -> Generator[Tuple[np.ndarray, int, int], None, None]:
         """
         Yields square regions of the image based on the filter size along with their
         top-left corner coordinates.
@@ -36,10 +36,13 @@ class PoolLayer:
         for row in range(new_height):
             for column in range(new_width):
                 image_region = image[
-                    (row * self.filter_size):
-                    (row * self.filter_size + self.filter_size),
-                    (column * self.filter_size):
-                    (column * self.filter_size + self.filter_size)]
+                    (row * self.filter_size) : (
+                        row * self.filter_size + self.filter_size
+                    ),
+                    (column * self.filter_size) : (
+                        column * self.filter_size + self.filter_size
+                    ),
+                ]
 
                 yield image_region, row, column
 
@@ -54,8 +57,9 @@ class PoolLayer:
         - Pooled output as a 3D array.
         """
         height, width, num_channels = image.shape
-        output: np.ndarray = np.zeros((height // self.filter_size,
-                                       width // self.filter_size, num_channels))
+        output: np.ndarray = np.zeros(
+            (height // self.filter_size, width // self.filter_size, num_channels)
+        )
 
         for image_region, row, column in self.generate_image_regions(image):
             output[row, column] = np.amax(image_region, axis=(0, 1))
@@ -83,8 +87,9 @@ class PoolLayer:
                         # Pass gradient only to the maximum value within each pooling region.
                         if image_region[h, w, channel] == max_values[channel]:
                             gradient_input[
-                                row * self.filter_size + h, column *
-                                self.filter_size + w, channel
+                                row * self.filter_size + h,
+                                column * self.filter_size + w,
+                                channel,
                             ] = gradient_from_next_layer[row, column, channel]
         return gradient_input
 
@@ -95,10 +100,7 @@ class PoolLayer:
         Returns:
         - A dictionary containing the attributes of the Max Pooling layer.
         """
-        return {
-            "type": "PoolLayer",
-            "filter_size": self.filter_size
-        }
+        return {"type": "PoolLayer", "filter_size": self.filter_size}
 
     @staticmethod
     def deserialize(data: dict):

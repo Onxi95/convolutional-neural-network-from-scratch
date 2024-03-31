@@ -5,7 +5,7 @@ from utils.logger import logger
 
 def replace_and_invert(image: np.ndarray) -> np.ndarray:
     """
-    Removes the white background from an image, replaces it with a black background, 
+    Removes the white background from an image, replaces it with a black background,
     and inverts the colors of the foreground.
     """
     # Convert image to grayscale to detect the white background.
@@ -33,7 +33,9 @@ def replace_and_invert(image: np.ndarray) -> np.ndarray:
     return combined
 
 
-def adjust_sample_image(source_path: str, output_path: str, shape: tuple[int, int] = (28, 28)):
+def adjust_sample_image(
+    source_path: str, output_path: str, shape: tuple[int, int] = (28, 28)
+):
     """
     Removes the white background from an image, inverts the foreground colors to make them lighter,
     resizes the image to the specified shape, and then saves it to the specified output path.
@@ -46,7 +48,8 @@ def adjust_sample_image(source_path: str, output_path: str, shape: tuple[int, in
 
     processed_image = replace_and_invert(image)
     resized_image = cv2.resize(
-        processed_image, dsize=shape, interpolation=cv2.INTER_AREA)
+        processed_image, dsize=shape, interpolation=cv2.INTER_AREA
+    )
 
     success = cv2.imwrite(output_path, resized_image)
     if not success:

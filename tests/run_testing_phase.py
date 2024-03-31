@@ -9,12 +9,12 @@ from utils.logger import logger
 
 
 def run_testing_phase(
-        test_images: np.ndarray,
-        test_labels: np.ndarray,
-        img_size: int,
-        convolution_layer: ConvolutionLayer,
-        max_pooling_layer: PoolLayer,
-        softmax_output_layer: SoftMaxLayer
+    test_images: np.ndarray,
+    test_labels: np.ndarray,
+    img_size: int,
+    convolution_layer: ConvolutionLayer,
+    max_pooling_layer: PoolLayer,
+    softmax_output_layer: SoftMaxLayer,
 ):
     """
     Args:
@@ -38,7 +38,12 @@ def run_testing_phase(
     for image, label in zip(test_images, test_labels):
         image_array = image.reshape(img_size, img_size)
         softmax_probs, loss, correct = perform_forward_pass(
-            image_array, label, convolution_layer, max_pooling_layer, softmax_output_layer)
+            image_array,
+            label,
+            convolution_layer,
+            max_pooling_layer,
+            softmax_output_layer,
+        )
         total_loss += loss
         total_correct += correct
         predicted_label = np.argmax(softmax_probs)
@@ -47,8 +52,8 @@ def run_testing_phase(
     num_tests = len(test_images)
     test_loss = total_loss / num_tests
     test_accuracy = total_correct / num_tests
-    logger.info('Test Loss: %s', test_loss)
-    logger.info('Test Accuracy: %.2f%%', test_accuracy * 100)
+    logger.info("Test Loss: %s", test_loss)
+    logger.info("Test Accuracy: %.2f%%", test_accuracy * 100)
 
     logger.info("Confusion Matrix:")
     print_confusion_matrix_with_labels(confusion_matrix, list(labels.values()))
@@ -56,12 +61,17 @@ def run_testing_phase(
     return test_loss, test_accuracy
 
 
-def print_confusion_matrix_with_labels(confusion_matrix, labels: list[str], column_width=12):
+def print_confusion_matrix_with_labels(
+    confusion_matrix, labels: list[str], column_width=12
+):
     """
     Prints the confusion matrix with class labels.
     """
-    header = " " * column_width + "| " + \
-        " | ".join([label.center(column_width) for label in labels])
+    header = (
+        " " * column_width
+        + "| "
+        + " | ".join([label.center(column_width) for label in labels])
+    )
     separator = "-" * len(header)
 
     table = separator + "\n" + header + "\n" + separator + "\n"
@@ -71,7 +81,10 @@ def print_confusion_matrix_with_labels(confusion_matrix, labels: list[str], colu
         for value in confusion_matrix[i]:
             # row percentage
             percentage = (
-                value / sum(confusion_matrix[i])) * 100 if sum(confusion_matrix[i]) != 0 else 0
+                (value / sum(confusion_matrix[i])) * 100
+                if sum(confusion_matrix[i]) != 0
+                else 0
+            )
             value_str = f"{value} ({percentage:.0f}%)".center(column_width)
             row_str += value_str + " | "
         table += row_str + "\n" + separator + "\n"

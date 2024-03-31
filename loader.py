@@ -21,7 +21,7 @@ class MNIST(object):
         train_labels (list): The loaded training labels.
     """
 
-    def __init__(self, path='.'):
+    def __init__(self, path="."):
         """
         Initialize the MNIST object.
 
@@ -31,11 +31,11 @@ class MNIST(object):
         """
         self.path = path
 
-        self.test_img_fname = 't10k-images-idx3-ubyte'
-        self.test_lbl_fname = 't10k-labels-idx1-ubyte'
+        self.test_img_fname = "t10k-images-idx3-ubyte"
+        self.test_lbl_fname = "t10k-labels-idx1-ubyte"
 
-        self.train_img_fname = 'train-images-idx3-ubyte'
-        self.train_lbl_fname = 'train-labels-idx1-ubyte'
+        self.train_img_fname = "train-images-idx3-ubyte"
+        self.train_lbl_fname = "train-labels-idx1-ubyte"
 
         self.test_images = []
         self.test_labels = []
@@ -50,8 +50,10 @@ class MNIST(object):
         Returns:
             A tuple containing the loaded testing images and labels.
         """
-        ims, labels = self.load(os.path.join(self.path, self.test_img_fname),
-                                os.path.join(self.path, self.test_lbl_fname))
+        ims, labels = self.load(
+            os.path.join(self.path, self.test_img_fname),
+            os.path.join(self.path, self.test_lbl_fname),
+        )
 
         self.test_images = ims
         self.test_labels = labels
@@ -65,8 +67,10 @@ class MNIST(object):
         Returns:
             tuple: A tuple containing the loaded training images and labels.
         """
-        ims, labels = self.load(os.path.join(self.path, self.train_img_fname),
-                                os.path.join(self.path, self.train_lbl_fname))
+        ims, labels = self.load(
+            os.path.join(self.path, self.train_img_fname),
+            os.path.join(self.path, self.train_lbl_fname),
+        )
 
         self.train_images = ims
         self.train_labels = labels
@@ -80,8 +84,8 @@ class MNIST(object):
         Args:
             path_img (str): The path to the image data file.
             path_lbl (str): The path to the label data file.
-            batch (tuple, optional): A tuple containing the start index and the number of samples to load. 
-                                    If specified, only a subset of the data will be loaded. 
+            batch (tuple, optional): A tuple containing the start index and the number of samples to load.
+                                    If specified, only a subset of the data will be loaded.
                                     Defaults to None, which loads all the data.
 
         Returns:
@@ -94,26 +98,25 @@ class MNIST(object):
               the expected value (2051).
 
         """
-        with open(path_lbl, 'rb') as file:
+        with open(path_lbl, "rb") as file:
             magic, size = struct.unpack(">II", file.read(8))
             if magic != 2049:
-                raise ValueError(
-                    f'Magic number mismatch, expected 2049, got {magic}')
+                raise ValueError(f"Magic number mismatch, expected 2049, got {magic}")
 
             labels = array("B", file.read())
 
-        with open(path_img, 'rb') as file:
+        with open(path_img, "rb") as file:
             magic, size, rows, cols = struct.unpack(">IIII", file.read(16))
             if magic != 2051:
-                raise ValueError(
-                    f'Magic number mismatch, expected 2051, got {magic}')
+                raise ValueError(f"Magic number mismatch, expected 2051, got {magic}")
 
             image_data = array("B", file.read())
 
         if batch is not None:
-            image_data = image_data[batch[0] * rows * cols:
-                                    (batch[0] + batch[1]) * rows * cols]
-            labels = labels[batch[0]: batch[0] + batch[1]]
+            image_data = image_data[
+                batch[0] * rows * cols : (batch[0] + batch[1]) * rows * cols
+            ]
+            labels = labels[batch[0] : batch[0] + batch[1]]
             size = batch[1]
 
         images = []
@@ -121,6 +124,6 @@ class MNIST(object):
             images.append([0] * rows * cols)
 
         for i in range(size):
-            images[i][:] = image_data[i * rows * cols:(i + 1) * rows * cols]
+            images[i][:] = image_data[i * rows * cols : (i + 1) * rows * cols]
 
         return images, labels

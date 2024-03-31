@@ -11,12 +11,13 @@ from utils.labels import labels
 from utils.logger import logger
 
 
-def predict_in_dir(convolution_layer: ConvolutionLayer,
-                   max_pooling_layer: PoolLayer,
-                   softmax_output_layer: SoftMaxLayer,
-                   samples_dir: str,
-                   output_dir_path: str
-                   ) -> None:
+def predict_in_dir(
+    convolution_layer: ConvolutionLayer,
+    max_pooling_layer: PoolLayer,
+    softmax_output_layer: SoftMaxLayer,
+    samples_dir: str,
+    output_dir_path: str,
+) -> None:
     """
     Predicts the class labels for images in a directory using a given model.
 
@@ -45,17 +46,25 @@ def predict_in_dir(convolution_layer: ConvolutionLayer,
 
         for sample in adjusted_samples:
             sample_image = cv2.imread(
-                f'./{output_dir_path}/{sample}', cv2.IMREAD_GRAYSCALE)
+                f"./{output_dir_path}/{sample}", cv2.IMREAD_GRAYSCALE
+            )
             softmax_probs, _, _ = perform_forward_pass(
-                sample_image, 0, convolution_layer, max_pooling_layer, softmax_output_layer
+                sample_image,
+                0,
+                convolution_layer,
+                max_pooling_layer,
+                softmax_output_layer,
             )
 
             prediction = labels[np.argmax(softmax_probs)]
-            top_3_guesses = list(map(
-                lambda x: (labels[x[0]], x[1]),
-                sorted(
-                    enumerate(softmax_probs),
-                    key=lambda x: x[1], reverse=True)[:3]
-            ))
+            top_3_guesses = list(
+                map(
+                    lambda x: (labels[x[0]], x[1]),
+                    sorted(enumerate(softmax_probs), key=lambda x: x[1], reverse=True)[
+                        :3
+                    ],
+                )
+            )
             logger.info(
-                'Prediction for %s: %s, probs: %s', sample, prediction, top_3_guesses)
+                "Prediction for %s: %s, probs: %s", sample, prediction, top_3_guesses
+            )

@@ -7,14 +7,14 @@ from .update_model import update_model
 
 
 def run_epochs(
-        train_images: np.ndarray,
-        train_labels: np.ndarray,
-        img_size: int,
-        learning_rate: float,
-        num_of_epochs: int,
-        convolution_layer: ConvolutionLayer,
-        max_pooling_layer: PoolLayer,
-        softmax_output_layer: SoftMaxLayer
+    train_images: np.ndarray,
+    train_labels: np.ndarray,
+    img_size: int,
+    learning_rate: float,
+    num_of_epochs: int,
+    convolution_layer: ConvolutionLayer,
+    max_pooling_layer: PoolLayer,
+    softmax_output_layer: SoftMaxLayer,
 ):
     """
     Runs multiple epochs of training on the given dataset.
@@ -33,15 +33,15 @@ def run_epochs(
     """
     logger.info("Starting training...")
     for epoch in range(1, num_of_epochs + 1):
-        logger.info('Epoch %s', epoch)
+        logger.info("Epoch %s", epoch)
         cumulative_loss = 0.0
         correct_predictions = 0
 
         for i, (image, label) in enumerate(zip(train_images, train_labels)):
             if i % 100 == 99:  # Print progress every 100 images
-                logger.info('%s steps', i + 1)
-                logger.info('Training Loss %.5f', cumulative_loss / 100)
-                logger.info('Training Accuracy: %s%%', correct_predictions)
+                logger.info("%s steps", i + 1)
+                logger.info("Training Loss %.5f", cumulative_loss / 100)
+                logger.info("Training Accuracy: %s%%", correct_predictions)
                 cumulative_loss = 0
                 correct_predictions = 0
 
@@ -52,7 +52,7 @@ def run_epochs(
                 learning_rate,
                 convolution_layer,
                 max_pooling_layer,
-                softmax_output_layer
+                softmax_output_layer,
             )
             cumulative_loss += loss
             correct_predictions += correct

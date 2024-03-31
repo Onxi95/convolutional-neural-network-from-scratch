@@ -24,19 +24,24 @@ data_train, label_train = mndata.load_training()
 data_test, label_test = mndata.load_testing()
 logger.info("Data loaded.")
 
-training_set_size = int(input(
-    "Enter the size of the training set (default: 10 000, max: 60 000): ") or 10_000)
+training_set_size = int(
+    input("Enter the size of the training set (default: 10 000, max: 60 000): ")
+    or 10_000
+)
 logger.info("Training set size: %s", training_set_size)
-test_set_size = int(input(
-    "Enter the size of the training set (default: 1 000, max: 10 000): ") or 1_000)
+test_set_size = int(
+    input("Enter the size of the training set (default: 1 000, max: 10 000): ") or 1_000
+)
 logger.info("Test set size: %s", test_set_size)
 
 logger.info("Shuffling data...")
 
 train_images, train_labels = shuffle(
-    cast(list[int], data_train), cast(list[int], label_train), training_set_size)
+    cast(list[int], data_train), cast(list[int], label_train), training_set_size
+)
 test_images, test_labels = shuffle(
-    cast(list[int], data_test), cast(list[int], label_test), test_set_size)
+    cast(list[int], data_test), cast(list[int], label_test), test_set_size
+)
 
 logger.info("Data shuffled.")
 
@@ -59,39 +64,33 @@ if should_train_again.lower() == "n":
         img_size,
         convolution_layer,
         max_pooling_layer,
-        softmax_output_layer
+        softmax_output_layer,
     )
     predict_in_dir(
-        convolution_layer,
-        max_pooling_layer,
-        softmax_output_layer,
-        samples_dir,
-        outdir
+        convolution_layer, max_pooling_layer, softmax_output_layer, samples_dir, outdir
     )
     exit(0)
 
 output_classes = 10
 filter_size = 3
 
-filters_count = int(
-    input("Enter the number of filters (default: 32): ").strip() or 32)
+filters_count = int(input("Enter the number of filters (default: 32): ").strip() or 32)
 logger.info("Number of filters: %s", filters_count)
 pool_size = int(input("Enter the pool size (default: 1): ").strip() or 1)
 logger.info("Pool size: %s", pool_size)
 softmax_edge = int((img_size - 2) / pool_size)
 
-num_of_epochs = int(
-    input("Enter the number of epochs (default: 5): ").strip() or 5)
+num_of_epochs = int(input("Enter the number of epochs (default: 5): ").strip() or 5)
 logger.info("Number of epochs: %s", num_of_epochs)
 learning_rate = float(
-    input("Enter the learning rate (default: 0.005): ").strip() or 0.005)
+    input("Enter the learning rate (default: 0.005): ").strip() or 0.005
+)
 logger.info("Learning rate: %s", learning_rate)
 
 logger.info("Initializing layers...")
 convolution_layer = ConvolutionLayer(filters_count, filter_size)
 max_pooling_layer = PoolLayer(pool_size)
-softmax_output_layer = SoftMaxLayer(
-    softmax_edge**2 * filters_count, output_classes)
+softmax_output_layer = SoftMaxLayer(softmax_edge**2 * filters_count, output_classes)
 logger.info("Layers initialized.")
 
 run_epochs(
@@ -102,7 +101,7 @@ run_epochs(
     num_of_epochs,
     convolution_layer,
     max_pooling_layer,
-    softmax_output_layer
+    softmax_output_layer,
 )
 
 run_testing_phase(
@@ -111,29 +110,26 @@ run_testing_phase(
     img_size,
     convolution_layer,
     max_pooling_layer,
-    softmax_output_layer
+    softmax_output_layer,
 )
 
 predict_in_dir(
-    convolution_layer,
-    max_pooling_layer,
-    softmax_output_layer,
-    samples_dir,
-    outdir
+    convolution_layer, max_pooling_layer, softmax_output_layer, samples_dir, outdir
 )
 
-model_outdir = input(
-    "Enter the directory to save the model (default: 'model'): ") or "model"
+model_outdir = (
+    input("Enter the directory to save the model (default: 'model'): ") or "model"
+)
 
 if not os.path.exists(model_outdir):
     os.makedirs(model_outdir)
 
-current_date = datetime.today().strftime('%Y-%m-%d-%H:%m')
-model_name = input(
-    f"Enter the name of the model (default: {current_date}.json): ") or current_date
+current_date = datetime.today().strftime("%Y-%m-%d-%H:%m")
+model_name = (
+    input(f"Enter the name of the model (default: {current_date}.json): ")
+    or current_date
+)
 
-save_model(convolution_layer,
-           max_pooling_layer,
-           softmax_output_layer,
-           model_name,
-           model_outdir)
+save_model(
+    convolution_layer, max_pooling_layer, softmax_output_layer, model_name, model_outdir
+)

@@ -21,11 +21,12 @@ class ConvolutionLayer:
         self.filter_size: int = filter_size
         # Initialize filters as a 3D array of random values, normalized by the filter size squared.
         self.filters: np.ndarray = np.random.randn(
-            number_of_filters, filter_size, filter_size) / (filter_size ** 2)
+            number_of_filters, filter_size, filter_size
+        ) / (filter_size**2)
 
-    def generate_image_regions(self, image: np.ndarray) -> Generator[
-        Tuple[np.ndarray, int, int], None, None
-    ]:
+    def generate_image_regions(
+        self, image: np.ndarray
+    ) -> Generator[Tuple[np.ndarray, int, int], None, None]:
         """
         A generator function that yields regions of the image to be convolved with filters,
         including the region's top-left corner coordinates.
@@ -39,8 +40,9 @@ class ConvolutionLayer:
 
         for row in range(image_height - self.filter_size + 1):
             for column in range(image_width - self.filter_size + 1):
-                image_region = image[row:(
-                    row + self.filter_size), column:(column + self.filter_size)]
+                image_region = image[
+                    row : (row + self.filter_size), column : (column + self.filter_size)
+                ]
                 yield image_region, row, column
 
     def forward(self, image: np.ndarray) -> np.ndarray:
@@ -61,10 +63,10 @@ class ConvolutionLayer:
 
         # Initialize the convolution output as a 3D array.
         output: np.ndarray = np.zeros(
-            (output_height, output_width, self.number_of_filters))
+            (output_height, output_width, self.number_of_filters)
+        )
         for image_region, row, column in self.generate_image_regions(image):
-            output[row, column] = np.sum(
-                image_region * self.filters, axis=(1, 2))
+            output[row, column] = np.sum(image_region * self.filters, axis=(1, 2))
 
         return output
 
@@ -83,8 +85,9 @@ class ConvolutionLayer:
         filters_gradient: np.ndarray = np.zeros(self.filters.shape)
         for image_region, row, column in self.generate_image_regions(self.image):
             for filter_index in range(self.number_of_filters):
-                filters_gradient[filter_index] += image_region * \
-                    loss_gradient[row, column, filter_index]
+                filters_gradient[filter_index] += (
+                    image_region * loss_gradient[row, column, filter_index]
+                )
 
         # Update filters by subtracting a portion of the gradient determined by the learning rate.
         self.filters -= learning_rate * filters_gradient
@@ -99,7 +102,7 @@ class ConvolutionLayer:
             "type": "ConvolutionLayer",
             "number_of_filters": self.number_of_filters,
             "filter_size": self.filter_size,
-            "filters": self.filters.tolist()
+            "filters": self.filters.tolist(),
         }
         return layer_dict
 
