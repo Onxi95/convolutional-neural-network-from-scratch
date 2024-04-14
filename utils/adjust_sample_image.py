@@ -1,36 +1,32 @@
 import cv2
 import numpy as np
-from utils.logger import logger
+from logger import logger
 
 
 def replace_and_invert(image: np.ndarray) -> np.ndarray:
     """
-    Removes the white background from an image, replaces it with a black background,
-    and inverts the colors of the foreground.
+    Removes the white background from a grayscale image, replaces it with a black background,
+    and inverts the grayscale values of the foreground.
     """
-    # Convert image to grayscale to detect the white background.
+    # Convert image to grayscale
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+
+    # Create a binary mask where white regions (threshold above 240) are white
     _, binary_mask = cv2.threshold(gray, 240, 255, cv2.THRESH_BINARY)
 
-    # Create an inverted mask for the foreground.
+    # Invert the mask to get black background
     inverted_mask = cv2.bitwise_not(binary_mask)
 
-    # Extract the foreground by applying the mask.
-    foreground = cv2.bitwise_and(image, image, mask=inverted_mask)
+    # Apply the inverted mask to extract the foreground
+    foreground = cv2.bitwise_and(gray, inverted_mask)
 
-    # Determine where the foreground is in the image.
-    foreground_mask = np.any(foreground != [0, 0, 0], axis=-1)
+    # Convert 255 to a NumPy array and subtract it from the foreground
+    foreground = np.subtract(np.full_like(foreground, 255), foreground)
 
-    # Prepare an empty (black) background.
-    background = np.zeros_like(image)
+    # Combine the inverted foreground with the black background
+    result = np.where(inverted_mask == 0, 0, foreground)
 
-    # Combine the extracted foreground with the empty background.
-    combined = np.where(foreground == 0, background, foreground)
-
-    # Invert the colors of the foreground.
-    combined[foreground_mask] = 255 - combined[foreground_mask]
-
-    return combined
+    return result
 
 
 def adjust_sample_image(
