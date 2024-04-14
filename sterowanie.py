@@ -252,7 +252,7 @@ if not os.path.exists(model_outdir):
 current_date = datetime.today().strftime("%Y-%m-%d-%H:%m")
 model_name = (
     input(f"Enter the name of the model (default: {current_date}.json): ")
-    or current_date
+    or f"{current_date}.json"
 )
 
 save_model(
